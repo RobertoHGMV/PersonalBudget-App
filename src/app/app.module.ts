@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+//Rotas
+import { Routing, RoutingProviders } from './app.routing';
+
 //Root
 import { AppComponent } from './app.component';
 
@@ -15,21 +18,24 @@ import { FooterComponent } from './components/shared/footer/footer.component';
 //Pages
 import { HomePageComponent } from './components/pages/home-page/home-page.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
+import { SignupPageComponent } from './components/pages/signup-page/signup-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeadbarComponent,
     SubMenuComponent,
+    SidebarComponent,
     FooterComponent,
     HomePageComponent,
     LoginPageComponent,
-    SidebarComponent
+    SignupPageComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    Routing
   ],
   providers: [],
   bootstrap: [AppComponent]
