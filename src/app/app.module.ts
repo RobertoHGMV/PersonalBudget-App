@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 //Rotas
@@ -16,9 +16,9 @@ import { SubMenuComponent } from './components/shared/sub-menu/sub-menu.componen
 import { FooterComponent } from './components/shared/footer/footer.component';
 
 //Pages
-import { HomePageComponent } from './components/pages/home-page/home-page.component';
-import { LoginPageComponent } from './components/pages/login-page/login-page.component';
-import { SignupPageComponent } from './components/pages/signup-page/signup-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +34,7 @@ import { SignupPageComponent } from './components/pages/signup-page/signup-page.
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     Routing
   ],

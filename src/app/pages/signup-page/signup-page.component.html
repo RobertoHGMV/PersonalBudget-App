@@ -1,0 +1,118 @@
+<section class="hero is-fullheight is-dark is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-vcentered">
+        <div class="column is-4 is-offset-4">
+          <h1 class="title animated fadeInDown">
+            Registrar Usuário
+          </h1>
+          <div class="box animated fadeIn">
+            <form [formGroup]="form">
+               <div class="field">
+                <label class="label">Nome</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="text" placeholder="José" formControlName="firstName" [ngClass]="(!form.controls.firstName.valid && !form.controls.firstName.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-user"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                    <i class="fa fa-warning" *ngIf="!form.controls.firstName.valid && !form.controls.firstName.pristine"></i>
+                    <i class="fa fa-check" *ngIf="form.controls.firstName.valid && !form.controls.firstName.pristine"></i>
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.firstName.valid && !form.controls.firstName.pristine">Nome inválido</p>
+              </div> 
+
+              <div class="field">
+                <label class="label">Sobrenome</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="text" placeholder="Santos" formControlName="lastName" [ngClass]="(!form.controls.lastName.valid && !form.controls.lastName.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-user"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                    <i class="fa fa-warning" *ngIf="!form.controls.lastName.valid && !form.controls.lastName.pristine"></i>
+                    <i class="fa fa-check" *ngIf="form.controls.lastName.valid && !form.controls.lastName.pristine"></i>
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.lastName.valid && !form.controls.lastName.pristine">Sobrenome inválido</p>
+              </div> 
+
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="email" placeholder="pedro@example.org" (blur)="checkEmail()" id="emailControl" formControlName="email" [ngClass]="(!form.controls.email.valid && !form.controls.email.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                     <i class="fa fa-warning" *ngIf="!form.controls.email.valid && !form.controls.email.pristine"></i>
+                     <i class="fa fa-check" *ngIf="form.controls.email.valid && !form.controls.email.pristine"></i> 
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.email.valid && !form.controls.email.pristine">E-mail inválido</p>
+              </div> 
+
+              <div class="field">
+                <label class="label">Usuário</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="text" placeholder="jose" id="userName" formControlName="userName" [ngClass]="(!form.controls.userName.valid && !form.controls.userName.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-user"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                    <i class="fa fa-warning" *ngIf="!form.controls.userName.valid && !form.controls.userName.pristine"></i>
+                    <i class="fa fa-check" *ngIf="form.controls.userName.valid && !form.controls.userName.pristine"></i>
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.userName.valid && !form.controls.userName.pristine">Nome de usuário inválido</p>
+              </div> 
+              
+              <hr>
+
+              <div class="field">
+                <label class="label">Senha</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="password" placeholder="Santos" formControlName="password" [ngClass]="(!form.controls.password.valid && !form.controls.password.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                    <i class="fa fa-warning" *ngIf="!form.controls.password.valid && !form.controls.password.pristine"></i>
+                    <i class="fa fa-check" *ngIf="form.controls.password.valid && !form.controls.password.pristine"></i>
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.password.valid && !form.controls.password.pristine">Senha inválida</p>
+              </div> 
+
+              <div class="field">
+                <label class="label">Confirmar senha</label>
+                <div class="control has-icons-left has-icons-right">
+                  <input class="input" type="password" placeholder="Santos" formControlName="confirmPassword" [ngClass]="(!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine) ? 'is-danger' : is-success">
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                  <span class="icon is-small is-right">
+                    <i class="fa fa-warning" *ngIf="!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine"></i>
+                    <i class="fa fa-check" *ngIf="form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine"></i>
+                  </span>
+                </div>
+                <p class="help is-danger" *ngIf="!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine">Senha inválida</p>
+              </div> 
+
+              <hr>
+              <p class="control">
+                <button class="button is-primary">Registrar</button>
+                <button class="button is-default">Cancelar</button>
+              </p>
+            </form>
+          </div>
+          <p class="has-text-centered animated fadeInUp">
+            <a routerLink="/">Login</a> |
+            <a href="#">Need help?</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

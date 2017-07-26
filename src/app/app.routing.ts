@@ -1,9 +1,9 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomePageComponent } from './components/pages/home-page/home-page.component';
-import { SignupPageComponent } from './components/pages/signup-page/signup-page.component';
-import { LoginPageComponent } from './components/pages/login-page/login-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { SignupPageComponent } from './pages/signup-page/signup-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 
 const appRoutes: Routes = [
     { path: '', component: LoginPageComponent },
