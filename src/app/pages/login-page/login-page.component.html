@@ -25,35 +25,44 @@
                 <!-- <h1 class="avatar has-text-centered section">
                   <img src="https://placehold.it/128x128">
                 </h1> -->
+                <div class="notification is-info" *ngIf="info != ''">
+                  <button class="delete" (click)="closeInfo()"></button>{{info}}
+                </div>
+                <div class="notification is-danger" id="notification" *ngIf="errors.length > 0">
+                  <button class="delete" (click)="closeErrors()"></button>
+                  <ul>
+                    <li *ngFor="let error of errors">{{ error.message }}</li>
+                  </ul>
+                </div>
                 <div class="hero-heading">
                   <div class="section has-text-centered courgette animated pulse infinite">
                     <p class="help has-text-centered medium-text">Personal Budget</p>
                   </div>
                 </div>
-                <div class="login-form">
-                  <p class="control has-icon has-icon-right">
-                    <input class="input email-input" type="text" placeholder="Nome de usuário">
-                    <span class="icon user">
+                <form [formGroup]="form">
+                  <div class="login-form">
+                    <p class="control has-icon has-icon-right">
+                      <input class="input email-input" type="text" placeholder="Nome de usuário" formControlName="username">
+                      <span class="icon user">
                       <i class="fa fa-user"></i>
                     </span>
-                  </p>
+                    </p>
 
-                  <p class="control has-icon has-icon-right">
-                    <input class="input password-input" type="password" placeholder="●●●●●●●">
-                    <span class="icon user">
+                    <p class="control has-icon has-icon-right">
+                      <input class="input password-input" type="password" placeholder="●●●●●●●" formControlName="password">
+                      <span class="icon user">
                       <i class="fa fa-lock"></i>
                     </span>
-                  </p>
-                  <p class="control login">
-                    <button class="button is-success is-outlined is-medium is-fullwidth" routerLink="/home">Entrar</button>
-                  </p>
-                </div>
+                    </p>
+                    <p class="control login">
+                      <button class="button is-success is-outlined is-medium is-fullwidth" (click)="checkValues()">Entrar</button>
+                    </p>
+                  </div>
+                </form>
                 <br>
                 <p class="has-text-centered">
-                  <a (click)="showModal('modalSendEmail')">Esqueceu a senha?</a>
-                </p>
-                <p class="has-text-centered">
-                  <a routerLink="/signup">Registrar</a>
+                  <button class="button is-link is-info is-outlined" routerLink="/signup">Registrar</button>
+                  <button class="button is-link is-info is-outlined" (click)="showModal('modalSendEmail')">Esqueceu a senha?</button>
                 </p>
               </div>
             </div>
@@ -87,14 +96,14 @@
     </section>
     <footer class="modal-card-foot">
       <p class="control">
-        <button class="button is-info" (click)="hideModal('modalSendEmail'); showModal('modalMsg');">Enviar</button>
+        <button class="button is-info" (click)="hideModal('modalSendEmail'); showInfo();">Enviar</button>
         <button class="button" (click)="hideModal('modalSendEmail')">Cancelar</button>
       </p>
     </footer>
   </div>
 </div>
 
-<div class="modal animated fadeIn" id="modalMsg">
+<!-- <div class="modal animated fadeIn" id="modalMsg">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -108,4 +117,4 @@
       <button class="button" (click)="hideModal('modalMsg')">OK</button>
     </footer>
   </div>
-</div>
+</div> -->

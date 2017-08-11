@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+//Services
+import { AccountService } from './services/account.service';
+import { AuthService } from './services/auth.service';
+
 //Rotas
 import { Routing, RoutingProviders } from './app.routing';
 
@@ -19,6 +23,10 @@ import { FooterComponent } from './components/shared/footer/footer.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
+import { ToggleMenuComponent } from './components/shared/toggle-menu/toggle-menu.component';
+
+//Formulários
+import { AccountsComponent } from './components/forms/accounts/accounts.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +37,9 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component';
     FooterComponent,
     HomePageComponent,
     LoginPageComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    ToggleMenuComponent,
+    AccountsComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +48,7 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component';
     HttpModule,
     Routing
   ],
-  providers: [],
+  providers: [AccountService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

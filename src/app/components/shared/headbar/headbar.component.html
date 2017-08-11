@@ -1,15 +1,35 @@
-<nav class="nav has-shadow" id="top">
-  <div class="container">
-    <div class="nav-left animated fadeInDown">
+<nav class="nav has-shadow animated fadeInDown" id="top">
+  <div class="container catamaran">
+    <div class="nav-left">
       <a class="nav-item courgette medium-text" href="../index.html">
         Personal Budget
       </a>
+      <button (click)="addAccount()">Adicionar</button>
     </div>
     <span class="nav-toggle">
       <span></span>
       <span></span>
       <span></span>
     </span>
+    <div class="nav-right nav-menu">
+      <a class="nav-item is-active">
+        Home
+      </a>
+      <a class="nav-item">
+        Examples ({{ totalAccounts }})
+      </a>
+      <a class="nav-item">
+        Documentation
+      </a>
+      <span class="nav-item">
+        <a class="button is-info is-inverted" (click)="logout()">
+          <span class="icon">
+            <i class="fa fa-power-off"></i>
+          </span>
+          <span>Sair</span>
+        </a>
+      </span>
+    </div>
     <app-sub-menu></app-sub-menu>
   </div>
 </nav>

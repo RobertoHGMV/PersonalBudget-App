@@ -5,9 +5,11 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 
+import { AuthService } from './services/auth.service';
+
 const appRoutes: Routes = [
     { path: '', component: LoginPageComponent },
-    { path: 'home', component: HomePageComponent },
+    { path: 'home', canActivate: [AuthService], component: HomePageComponent },
     { path: 'signup', component: SignupPageComponent }
 ];
 

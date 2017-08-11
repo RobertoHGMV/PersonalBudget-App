@@ -4,18 +4,16 @@
       <app-sidebar></app-sidebar>
     </div>
   </aside>
-  <div class="column is-10 admin-panel">
+  <div class="column is-10 admin-panel animated">
     <app-headbar></app-headbar>
-    <section class="hero is-small animated fadeInRight">
-      <!-- Hero content: will be in the middle -->
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Admin Dashboard
-          </h1>
-          <h2 class="subtitle">
-            A simple admin template
-          </h2>
+    <section class="section animated fadeInRight">
+      <div class="container">
+        <div class="columns is-mobile is-multiline">
+          <div class="column is-full-mobile">
+            <section class="panel">
+              <app-accounts></app-accounts>
+            </section>
+          </div>
         </div>
       </div>
     </section>

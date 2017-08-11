@@ -5,8 +5,14 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
+  public user: string = '';
 
-  constructor() { }
+  constructor() {
+    let data: any = JSON.parse(localStorage.getItem('pb.user'));
+    if (data) {
+      this.user = data.name;
+    }
+  }
 
   ngOnInit() {
   }

@@ -2,16 +2,25 @@
   <div class="hero-body">
     <div class="container">
       <div class="columns is-vcentered">
-        <div class="column is-4 is-offset-4">
-          <h1 class="title animated fadeInDown">
+        <div class="column courgette is-4 is-offset-4">
+          <h1 class="title animated has-text-centered fadeInDown">
             Registrar Usuário
           </h1>
           <div class="box animated fadeIn">
+            <div class="notification is-success" *ngIf="success != ''">
+              <button class="delete" (click)="closeSuccess()"></button>{{success}}
+            </div>
+            <div class="notification is-danger" id="notification" *ngIf="errors.length > 0">
+              <button class="delete" (click)="closeErrors()"></button>
+              <ul>
+                <li *ngFor="let error of errors">{{ error.message }}</li>
+              </ul>
+            </div>
             <form [formGroup]="form">
-               <div class="field">
+              <div class="field">
                 <label class="label">Nome</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="José" formControlName="firstName" [ngClass]="(!form.controls.firstName.valid && !form.controls.firstName.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="text" placeholder="Pedro" formControlName="firstName" [ngClass]="(!form.controls.firstName.valid && !form.controls.firstName.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-user"></i>
                   </span>
@@ -21,12 +30,12 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.firstName.valid && !form.controls.firstName.pristine">Nome inválido</p>
-              </div> 
+              </div>
 
               <div class="field">
                 <label class="label">Sobrenome</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="Santos" formControlName="lastName" [ngClass]="(!form.controls.lastName.valid && !form.controls.lastName.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="text" placeholder="Ribeiro" formControlName="lastName" [ngClass]="(!form.controls.lastName.valid && !form.controls.lastName.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-user"></i>
                   </span>
@@ -36,12 +45,12 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.lastName.valid && !form.controls.lastName.pristine">Sobrenome inválido</p>
-              </div> 
+              </div>
 
               <div class="field">
                 <label class="label">Email</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="email" placeholder="pedro@example.org" (blur)="checkEmail()" id="emailControl" formControlName="email" [ngClass]="(!form.controls.email.valid && !form.controls.email.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="email" placeholder="pedro@example.org" id="emailControl" formControlName="email" [ngClass]="(!form.controls.email.valid && !form.controls.email.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-envelope"></i>
                   </span>
@@ -51,12 +60,12 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.email.valid && !form.controls.email.pristine">E-mail inválido</p>
-              </div> 
+              </div>
 
               <div class="field">
                 <label class="label">Usuário</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="jose" id="userName" formControlName="userName" [ngClass]="(!form.controls.userName.valid && !form.controls.userName.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="text" placeholder="pedro" id="userName" formControlName="userName" [ngClass]="(!form.controls.userName.valid && !form.controls.userName.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-user"></i>
                   </span>
@@ -66,14 +75,14 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.userName.valid && !form.controls.userName.pristine">Nome de usuário inválido</p>
-              </div> 
-              
+              </div>
+
               <hr>
 
               <div class="field">
                 <label class="label">Senha</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="password" placeholder="Santos" formControlName="password" [ngClass]="(!form.controls.password.valid && !form.controls.password.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="password" [ngClass]="(!form.controls.password.valid && !form.controls.password.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -83,12 +92,12 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.password.valid && !form.controls.password.pristine">Senha inválida</p>
-              </div> 
+              </div>
 
               <div class="field">
                 <label class="label">Confirmar senha</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="password" placeholder="Santos" formControlName="confirmPassword" [ngClass]="(!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine) ? 'is-danger' : is-success">
+                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="confirmPassword" [ngClass]="(!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine) ? 'is-danger' : is-success">
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -98,21 +107,40 @@
                   </span>
                 </div>
                 <p class="help is-danger" *ngIf="!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine">Senha inválida</p>
-              </div> 
+              </div>
 
               <hr>
               <p class="control">
-                <button class="button is-primary">Registrar</button>
-                <button class="button is-default">Cancelar</button>
+                <button (click)="submit()" class="button is-info" [disabled]="!form.valid">Registrar</button>
+                <button class="button is-link" routerLink="/">Cancelar</button>
               </p>
             </form>
           </div>
           <p class="has-text-centered animated fadeInUp">
-            <a routerLink="/">Login</a> |
-            <a href="#">Need help?</a>
+            <button class="button is-link is-info is-inverted is-outlined" routerLink="/">Login</button>&nbsp;|
+            <button class="button is-link is-info is-inverted is-outlined" (click)="showModal('modal')">Precisa de ajuda?</button>
           </p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<div class="modal animated fadeIn" id="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Regras para registro</p>
+      <button class="delete" (click)="hideModal('modal')"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>●Nome: 3 a 60 caracteres</p>
+      <p>●Sobrenome: 3 a 60 caracteres</p>
+      <p>●Usuário: 3 a 20 caracteres</p>
+      <p>●Senha: 3 a 60 caracteres</p>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button" (click)="hideModal('modal')">OK</button>
+    </footer>
+  </div>
+</div>
