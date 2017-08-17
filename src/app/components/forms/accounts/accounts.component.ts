@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AccountDataService } from '../../../services/account.data.service';
+import { Account } from '../../../models/account';
 
 @Component({
   selector: 'app-accounts',
@@ -8,14 +10,26 @@ import { AccountDataService } from '../../../services/account.data.service';
   providers: [AccountDataService]
 })
 export class AccountsComponent implements OnInit {
+  public errors: any[];
   public accounts: any[];
 
   constructor(private accountDataService: AccountDataService) { }
 
   ngOnInit() {
-    this.accountDataService.getAccounts().subscribe(result => {
-      this.accounts = result;
-    })
+    this.fillAccounts();
+  }
 
+  fillAccounts() {
+    this.accountDataService.getAccounts()
+      .subscribe(
+      result => {
+        console.log(result);
+        this.accounts = result;
+      },
+      error => {
+        this.errors = [];
+        this.errors = JSON.parse(error._body).errors;
+      }
+      );
   }
 }

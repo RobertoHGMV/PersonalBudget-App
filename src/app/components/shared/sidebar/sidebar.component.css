@@ -1,0 +1,9 @@
+.avatar img {
+  border-radius: 100px;
+  padding: 5px;
+  border: 1px solid #dbdbdb;
+}
+
+.title {
+    font-size: 1.0em;
+}

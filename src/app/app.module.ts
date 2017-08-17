@@ -14,19 +14,25 @@ import { Routing, RoutingProviders } from './app.routing';
 import { AppComponent } from './app.component';
 
 //Shared
+import { FormDebugComponent } from './components/shared/form-debug/form-debug.component';
 import { HeadbarComponent } from './components/shared/headbar/headbar.component';
 import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
 import { SubMenuComponent } from './components/shared/sub-menu/sub-menu.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
+import { ToggleMenuComponent } from './components/shared/toggle-menu/toggle-menu.component';
+import { IconErrorComponent } from './components/shared/errors/icon-error/icon-error.component';
+import { MessageErrorComponent } from './components/shared/errors/message-error/message-error.component';
+import { NotificationComponent } from './components/shared/notification/notification.component';
 
 //Pages
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
-import { ToggleMenuComponent } from './components/shared/toggle-menu/toggle-menu.component';
+import { AccountPageComponent } from './pages/account-page/account-page.component';
 
 //Formulários
 import { AccountsComponent } from './components/forms/accounts/accounts.component';
+import { AccountFormComponent } from './components/forms/account-form/account-form.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +45,13 @@ import { AccountsComponent } from './components/forms/accounts/accounts.componen
     LoginPageComponent,
     SignupPageComponent,
     ToggleMenuComponent,
-    AccountsComponent
+    AccountsComponent,
+    AccountFormComponent,
+    AccountPageComponent,
+    IconErrorComponent,
+    MessageErrorComponent,
+    NotificationComponent,
+    FormDebugComponent
   ],
   imports: [
     BrowserModule,

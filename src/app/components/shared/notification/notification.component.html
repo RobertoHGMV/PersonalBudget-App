@@ -1,0 +1,6 @@
+<div class="notification" *ngIf="show" [ngClass]="classNotification">
+  <button class="delete" (click)="closeNotification()"></button>{{ messages }}
+  <!-- <ul>
+    <li *ngFor="let message of messages">{{ message }}</li>
+  </ul> -->
+</div>
