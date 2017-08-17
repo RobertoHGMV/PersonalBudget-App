@@ -2,19 +2,6 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 export class Ui {
 
-    //Métodos de notificação
-    closeErrors(errors) {
-        errors = [];
-    }
-
-    showSuccess(success) {
-        success = "Operação realizada com sucesso";
-    }
-
-    closeSuccess(success) {
-        success = '';
-    }
-
     resetForm(form: FormGroup) {
         form.reset();
     }

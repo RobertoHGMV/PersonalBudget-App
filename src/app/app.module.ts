@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+//Packages
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 //Services
 import { AccountService } from './services/account.service';
 import { AuthService } from './services/auth.service';
@@ -22,7 +25,6 @@ import { FooterComponent } from './components/shared/footer/footer.component';
 import { ToggleMenuComponent } from './components/shared/toggle-menu/toggle-menu.component';
 import { IconErrorComponent } from './components/shared/errors/icon-error/icon-error.component';
 import { MessageErrorComponent } from './components/shared/errors/message-error/message-error.component';
-import { NotificationComponent } from './components/shared/notification/notification.component';
 
 //Pages
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -50,7 +52,6 @@ import { AccountFormComponent } from './components/forms/account-form/account-fo
     AccountPageComponent,
     IconErrorComponent,
     MessageErrorComponent,
-    NotificationComponent,
     FormDebugComponent
   ],
   imports: [
@@ -58,7 +59,8 @@ import { AccountFormComponent } from './components/forms/account-form/account-fo
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    Routing
+    Routing,
+    SimpleNotificationsModule.forRoot()
   ],
   providers: [AccountService, AuthService],
   bootstrap: [AppComponent]

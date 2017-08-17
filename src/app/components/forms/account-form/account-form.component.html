@@ -4,12 +4,12 @@
 <div class="box">
   <form [formGroup]="form">
     <div class="control has-icons-left has-icons-right">
-      <input class="input" (click)="teste()" type="text" formControlName="businessPartnerFirstName" [ngClass]="validField('businessPartnerFirstName') ? 'is-danger' : is-success" #name>
+      <input class="input" (click)="showSuccess()" type="text" formControlName="businessPartnerFirstName" [ngClass]="validField('businessPartnerFirstName') ? 'is-danger' : is-success" #name>
       <app-icon-error [icon]="setIcon('businessPartnerFirstName')"></app-icon-error>
       <app-message-error [showError]="validField('businessPartnerFirstName')" msgError="Nome inválido"></app-message-error>
       {{ name.className }}
     </div>  
   </form>
 </div>  
+<simple-notifications [options]="options"></simple-notifications>
 <app-form-debug [form]="form"></app-form-debug>
-<app-notification></app-notification>
