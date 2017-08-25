@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; //para evitar erro SimpleNotification
 
 //Packages
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -32,10 +33,6 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { AccountPageComponent } from './pages/account-page/account-page.component';
 
-//Formulários
-import { AccountsComponent } from './components/forms/accounts/accounts.component';
-import { AccountFormComponent } from './components/forms/account-form/account-form.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,8 +44,6 @@ import { AccountFormComponent } from './components/forms/account-form/account-fo
     LoginPageComponent,
     SignupPageComponent,
     ToggleMenuComponent,
-    AccountsComponent,
-    AccountFormComponent,
     AccountPageComponent,
     IconErrorComponent,
     MessageErrorComponent,
@@ -60,7 +55,8 @@ import { AccountFormComponent } from './components/forms/account-form/account-fo
     ReactiveFormsModule,
     HttpModule,
     Routing,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [AccountService, AuthService],
   bootstrap: [AppComponent]

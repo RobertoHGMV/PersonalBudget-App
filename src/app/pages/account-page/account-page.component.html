@@ -8,14 +8,387 @@
     <app-headbar></app-headbar>
     <section class="section animated fadeInRight">
       <!-- <div class="container"> -->
-         <div class="columns is-mobile is-multiline"> 
-           <div class="column is-full-mobile"> 
-             <section class="panel"> 
-              <app-account-form></app-account-form>
-             </section> 
-           </div> 
-         </div> 
+      <div class="columns is-mobile is-multiline">
+        <div class="column is-full-mobile">
+          <section class="panel">
+            <p class="panel-heading">
+              Contas
+            </p>
+            <div class="box">
+              <form [formGroup]="form">
+                <div class="field is-horizontal">
+                  <div class="field-label">
+                    <strong>Dados da Conta</strong>
+                  </div>
+                  <div class="field-body">
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <hr>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <!-- <label class="label">Fornecedor*</label> -->
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <p class="control is-expanded has-icons-left has-icons-right">
+                        <input class="input" type="text" placeholder="Nome" formControlName="businessPartnerFirstName" [ngClass]="setClass('businessPartnerFirstName')">
+                        <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                        <app-icon-error [icon]="setIcon('businessPartnerFirstName')"></app-icon-error>
+                        <app-message-error [showError]="validField('businessPartnerFirstName')" msgError="Nome inválido"></app-message-error>
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control is-expanded has-icons-left has-icons-right">
+                        <input class="input" type="text" placeholder="Sobrenome" formControlName="businessPartnerLastName" [ngClass]="setClass('businessPartnerLastName')">
+                        <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                        <app-icon-error [icon]="setIcon('businessPartnerLastName')"></app-icon-error>
+                        <app-message-error [showError]="validField('businessPartnerLastName')" msgError="Sobrenome inválido"></app-message-error>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <!-- <label class="label">Descrição da Conta*</label> -->
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <p class="control is-expanded has-icons-left has-icons-right">
+                        <input class="input" type="text" Maxlength="100" placeholder="Descrição" formControlName="accountDescription" [ngClass]="setClass('accountDescription')">
+                        <span class="icon is-small is-left"><i class="fa fa-text-width"></i></span>
+                        <app-icon-error [icon]="setIcon('accountDescription')"></app-icon-error>
+                        <app-message-error [showError]="validField('accountDescription')" msgError="Descrição excede 100 caracteres"></app-message-error>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <!-- <label class="label">Ven. Base*/Cond. de Pag.*</label> -->
+                  </div>
+                  <div class="field-body">
+                    <div class="field is-narrow">
+                      <p class="control is-expanded has-icons-left">
+                        <input class="input" type="date" formControlName="dueDateBase" (change)="dueDateChange()" [ngClass]="setClass('dueDateBase')">
+                        <span class="icon is-small is-left"><i class="fa fa-calendar"></i></span>
+                        <app-message-error [showError]="validField('dueDateBase')" msgError="Data inválida"></app-message-error>
+                      </p>
+                    </div>
+
+                    <div class="field">
+                      <div class="control">
+                        <div class="select is-fullwidth">
+                          <select formControlName="dueDateBase" formControlName="paymentTermsId">
+                                <!-- <option *ngFor="let paymentTerm of paymentTerms">{{ paymentTerm }}</option> -->
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                              </select>
+                        </div>
+                      </div>
+                      <app-message-error [showError]="validField('paymentTermsId')" msgError="Informe condição de pagamento"></app-message-error>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <!-- <label class="label">Observações</label> -->
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <textarea class="textarea" placeholder="Escreva sua observação..." formControlName="accountComments" [ngClass]="setClass('accountComments')"></textarea>
+                      </div>
+                      <app-message-error [showError]="validField('accountComments')" msgError=""></app-message-error>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <!-- <label class="label">Observações</label> -->
+                  </div>
+                  <div class="field-body">
+                    <div class="field is-narrow">
+                      <label class="checkbox">
+                            <input type="checkbox" formControlName="recurrent">
+                            Recorrente
+                          </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field is-horizontal">
+                  <div class="field-label">
+                    <strong>Itens</strong>
+                  </div>
+                  <div class="field-body">
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <hr>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-narrow">
+                      <div class="control">
+                        <button class="button is-info is-outlined" [disabled]="showItems" (click)="checkIfShowItems()">
+                              Salvar Conta
+                            </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--Item-->
+                <div *ngIf="showItems">
+                  <div formGroupName="item">
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <!-- <label class="label">Item</label> -->
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <p class="control is-expanded has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Nome do item" formControlName="title" [ngClass]="setClass('item.title')">
+                            <span class="icon is-small is-left"><i class="fa fa-text-width"></i></span>
+                            <app-icon-error [icon]="setIcon('item.title')"></app-icon-error>
+                            <app-message-error [showError]="validField('item.title')" msgError="Nome do item inválido"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field is-narrow">
+                          <p class="control has-icons-left">
+                            <input class="input" type="date" formControlName="purchaseDate" [ngClass]="setClass('item.purchaseDate')">
+                            <span class="icon is-small is-left"><i class="fa fa-calendar"></i></span>
+                            <app-message-error [showError]="validField('item.purchaseDate')" msgError="Data da compra inválida"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field is-narrow">
+                          <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Qtd" min="1" max="1000000" formControlName="quantity" [ngClass]="setClass('item.quantity')">
+                            <span class="icon is-small is-left"><i class="fa fa-asterisk"></i></span>
+                            <app-message-error [showError]="validField('item.quantity')" msgError="Quantidade inválida"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field is-narrow">
+                          <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Preço" min="0.01" max="1000000" formControlName="price" [ngClass]="setClass('item.price')">
+                            <span class="icon is-small is-left"><i class="fa fa-money"></i></span>
+                            <app-message-error [showError]="validField('item.price')" msgError="Preço inválido"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field is-narrow">
+                          <div class="control">
+                            <button class="button is-link" (click)="addItem()">
+                                Adicionar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <!-- <label class="label">Itens da Conta</label> -->
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <div class="panel-block">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Item.</th>
+                                    <th>Data</th>
+                                    <th>Qtd.</th>
+                                    <th>Preço</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let item of items">
+                                    <td>{{ item.title }}</td>
+                                    <td>{{ item.purchaseDate | date: 'dd/MM/yyyy' }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.price | number: '1.2-2' }}</td>
+                                    <td><strong>{{ getItemValueTotal(item) | number: '1.2-2' }}</strong></td>
+                                    <td class="is-icon has-text-centered"><a class="button is-info is-outlined" (click)="editItem(item)"><i class="fa fa-pencil-square-o"></i></a></td>
+                                    <td class="is-icon has-text-centered"><a class="button is-danger is-outlined" (click)="removeItem(item)"><i class="fa fa-times"></i></a></td>
+                                  </tr>
+                                </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="6">
+                                      <h3>Subtotal</h3>
+                                    </td>
+                                    <td class="has-text-centered"><strong>{{ getAccountSubTotal() | number: '1.2-2' }}</strong></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="5">
+                                      <h3>Desconto</h3>
+                                    </td>
+                                    <td class="has-text-centered"><strong>{{ percent | number: '1.2-2' }}%</strong></td>
+                                    <td class="has-text-centered"><strong>{{ discount | number: '1.2-2' }}</strong></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="6">
+                                      <h3>Total</h3>
+                                    </td>
+                                    <td class="has-text-centered"><strong>{{ getAccountTotal() | number: '1.2-2' }}</strong></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Desconto e Parcelas</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <hr>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <!-- <label class="label">Desconto/Parcela</label> -->
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <hr>
+                        </div>
+                      </div>
+                      <div class="field is-narrow">
+                        <p class="control has-icons-left">
+                          <input class="input" type="number" max="1000000" formControlName="discountPercent" (change)="changeDiscountPercent()" [ngClass]="setClass('discountPercent')">
+                          <span class="icon is-small is-left"><i class="fa fa-percent"></i></span>
+                          <app-message-error [showError]="validField('discountPercent')" msgError="Percentual inválido"></app-message-error>
+                        </p>
+                      </div>
+                      <div class="field is-narrow">
+                        <p class="control has-icons-left">
+                          <input class="input" type="number" placeholder="Desconto" max="1000000" (change)="changeDiscountValue()" formControlName="discountTotal"
+                            [ngClass]="setClass('discountTotal')">
+                          <span class="icon is-small is-left"><i class="fa fa-minus"></i></span>
+                          <app-message-error [showError]="validField('discountTotal')" msgError="Desconto inválido"></app-message-error>
+                        </p>
+                      </div>
+                      <div class="field is-narrow">
+                        <p class="control has-icons-left">
+                          <input class="input" type="number" placeholder="Nº Parc." max="1000000" formControlName="installmentNumber" (change)="setInstallments()"
+                            [ngClass]="setClass('installmentNumber')">
+                          <span class="icon is-small is-left"><i class="fa fa-asterisk"></i></span>
+                          <app-message-error [showError]="validField('installmentNumber')" msgError="Quantidade de parcelas inválida"></app-message-error>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Fim item-->
+
+                <!--installment-->
+                <div *ngIf="showInstallment">
+                  <div formGroupName="installment">
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <!-- <label class="label">Item</label> -->
+                      </div>
+                      <div class="field-body">
+                        <div class="field is-narrow">
+                          <p class="control has-icons-left">
+                            <input class="input" type="date" formControlName="dueDate" [ngClass]="setClass('installment.dueDate')">
+                            <span class="icon is-small is-left"><i class="fa fa-calendar"></i></span>
+                            <app-message-error [showError]="validField('installment.dueDate')" msgError="Data inválida"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field is-narrow">
+                          <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Valor" min="0.01" formControlName="total" [ngClass]="setClass('installment.total')">
+                            <span class="icon is-small is-left"><i class="fa fa-money"></i></span>
+                            <app-message-error [showError]="validField('installment.total')" msgError="Total inválido"></app-message-error>
+                          </p>
+                        </div>
+                        <div class="field">
+                          <p class="control is-expanded has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Observação" formControlName="comments" [ngClass]="setClass('installment.comments')">
+                            <span class="icon is-small is-left"><i class="fa fa-text-width"></i></span>
+                            <app-icon-error [icon]="setIcon('installment.comments')"></app-icon-error>
+                            <app-message-error [showError]="validField('installment.comments')" msgError="Obervação inválida"></app-message-error>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <!-- <label class="label">Itens da Conta</label> -->
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <div class="panel-block">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Sequência.</th>
+                                    <th>Vencimento</th>
+                                    <th>Total</th>
+                                    <th>Recorrente</th>
+                                    <th>Observação</th>
+                                    <th></th>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let installment of installments">
+                                    <td>{{ installment.sequence | number: '1.0' }}</td>
+                                    <td>{{ installment.dueDate | date: 'dd/MM/yyyy' }}</td>
+                                    <td>{{ installment.total | number: '1.2-2' }}</td>
+                                    <td>{{ installment.recurrent }}</td>
+                                    <td>{{ installment.comments }}</td>
+                                    <td class="is-icon has-text-centered"><a class="button is-info is-outlined" (click)="editItem(installment)"><i class="fa fa-pencil-square-o"></i></a></td>
+                                    <td class="is-icon has-text-centered"><a class="button is-danger is-outlined" (click)="removeItem(installment)"><i class="fa fa-times"></i></a></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Fim installment-->
+
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
       <!-- </div> -->
+      <simple-notifications [options]="options"></simple-notifications>
+      <app-form-debug [form]="form"></app-form-debug>
     </section>
   </div>
 </div>

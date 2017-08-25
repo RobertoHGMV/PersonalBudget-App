@@ -2,6 +2,17 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 export class Ui {
 
+    validForm(formGroup: FormGroup, validSubGroup: boolean = true) {
+        Object.keys(formGroup.controls).forEach(field => {
+            const control = formGroup.get(field);
+            control.markAsDirty();
+
+            if (validSubGroup && control instanceof FormGroup) {
+                this.validForm(control);
+            }
+        });
+    }
+
     resetForm(form: FormGroup) {
         form.reset();
     }
@@ -14,7 +25,7 @@ export class Ui {
     }
 
     setClassField(form: FormGroup, field) {
-        return this.verificationValidTouched(form, field) ? 'is-danger' : 'is-success'
+        return this.verificationValidTouched(form, field) ? 'is-danger' : ''
     }
 
     setIconInField(form: FormGroup, field) {
