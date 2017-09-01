@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { NotificationsService } from "angular2-notifications";
 
-import { CustomValidator } from '../../validators/custom.validators';
-import { AccountDataService } from '../../services/account.data.service';
-import { Ui } from '../../utils/ui';
+import { CustomValidator } from './../../validators/custom.validators';
+import { AccountDataService } from './../../services/account.data.service';
+import { Ui } from './../../utils/ui';
+import { Item } from './../../models/item';
+import { Installment } from './../../models/installment';
 
 @Component({
   selector: 'app-account-page',
@@ -18,12 +20,8 @@ import { Ui } from '../../utils/ui';
 export class AccountPageComponent implements OnInit {
   public form: FormGroup;
   public errors: any[] = [];
-  public showItems: boolean = true;
-  public showInstallment: boolean = true;
 
   public paymentTerms: any[] = [];
-  public items: any[] = [];
-  public installments: any[] = [];
 
   public percent: any = 0;
   public discount: any = 0;
@@ -38,12 +36,10 @@ export class AccountPageComponent implements OnInit {
     public ui: Ui, private _service: NotificationsService) { }
 
   ngOnInit() {
-    let newDate = new Date();
-    let day = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    let currentDate = year+'-'+month+'-'+day;
+    this.createForm();
+  }
 
+  createForm() {
     this.form = this.fb.group({
       businessPartnerFirstName: ['', Validators.compose([
         Validators.minLength(3),
@@ -59,41 +55,25 @@ export class AccountPageComponent implements OnInit {
         Validators.required,
         CustomValidator.SelectValidator
       ])],
-      discountPercent: [0, Validators.min(0)],
-      discountTotal: [0, Validators.min(0)],
+      discountPercent: ['', Validators.min(0)],
+      discountTotal: ['', Validators.min(0)],
       accountDescription: ['', Validators.maxLength(100)],
       recurrent: [false],
       accountComments: ['', Validators.maxLength(4000)],
-      dueDateBase: [currentDate, Validators.required],
+      dueDateBase: ['', Validators.required],
       installmentNumber: [0, Validators.min(0)],
-      // installmentValue: ['', Validators.min(0.01)],
 
-      item: this.fb.group({
-        title: ['', Validators.compose([
-          Validators.minLength(3),
-          Validators.maxLength(60),
-          Validators.required
-        ])],
-        price: [0, Validators.compose([
-          Validators.min(0.01),
-          Validators.required
-        ])],
-        quantity: [0, Validators.compose([
-          Validators.min(1),
-          Validators.required
-        ])],
-        purchaseDate: [currentDate]
-      }),
-      
-      installment: this.fb.group({
-        total: [0, Validators.compose([
-          Validators.min(0),
-          Validators.required
-        ])],
-        dueDate: [currentDate, Validators.required],
-        comments: ['', Validators.maxLength(4000)]
-      })
+      items: this.fb.array([]),
+      installments: this.fb.array([])
     });
+  }
+
+  get items(): FormArray {
+    return this.form.get('items') as FormArray;
+  }
+
+  get installments(): FormArray {
+    return this.form.get('installments') as FormArray;
   }
 
   resetFields() {
@@ -112,71 +92,97 @@ export class AccountPageComponent implements OnInit {
   }
 
   showErrors() {
-    console.log(this.errors);
     this.errors.forEach(error => this._service.error("Mensagem do sistema", error));
   }
 
-  validField(field) {
-    return this.ui.verificationValidTouched(this.form, field);
+  validField(field, index, formArrayName) {
+    let formGroup: FormGroup;
+
+    if (index != null && formArrayName != null)
+      formGroup = this.getFormGroupFromArray(index, formArrayName);
+    else
+      formGroup = this.form;
+
+    return this.ui.verificationValidTouched(formGroup, field);
   }
 
-  setClass(field) {
-    return this.ui.setClassField(this.form, field);
+  setClass(field, index, formArrayName) {
+    let formGroup: FormGroup;
+
+    if (index != null && formArrayName != null)
+      formGroup = this.getFormGroupFromArray(index, formArrayName);
+    else
+      formGroup = this.form;
+
+    return this.ui.setClassField(formGroup, field);
   }
 
-  setIcon(field) {
-    return this.ui.setIconInField(this.form, field);
+  setIcon(field, index, formArrayName) {
+    let formGroup: FormGroup;
+
+    if (index != null && formArrayName != null)
+      formGroup = this.getFormGroupFromArray(index, formArrayName);
+    else
+      formGroup = this.form;
+
+    return this.ui.setIconInField(formGroup, field);
   }
 
-  checkIfShowItems() {
-    this.showItems = true;
-
-    var fields = [
-      'businessPartnerFirstName',
-      'businessPartnerLastName',
-      'paymentTermsId',
-      'dueDateBase'
-    ];
-
-    fields.forEach(field => {
-      if (this.showItems && !this.form.get(field).valid)
-        this.showItems = false;
-    });
-
-    this.ui.validForm(this.form, false);
+  getFormGroupFromArray(index, formArrayName) {
+    let control = <FormArray>this.form.controls[formArrayName];
+    return control.at(index) as FormGroup;
   }
 
   //#region Items
-  addItem() {
-    var item = this.form.get('item').value;
-    this.items.push(item);
+  //não está sendo usado
+  setitems(items: Item[]) {
+    const itemFGs = items.map(item => this.fb.group(item));
+    const itemFormArray = this.fb.array(itemFGs);
+    this.form.setControl('items', itemFormArray);
+  }
 
+  additems() {
+    let itemGroup: FormGroup = this.fb.group({
+      title: ['', Validators.compose([
+        Validators.minLength(3),
+        Validators.maxLength(60),
+        Validators.required
+      ])],
+      purchaseDate: [''],
+      quantity: [2, Validators.compose([
+        Validators.min(1),
+        Validators.required
+      ])],
+      price: [100, Validators.compose([
+        Validators.min(0.01),
+        Validators.required
+      ])]
+    });
+
+    this.items.push(itemGroup);
+  }
+
+  editItem() {
     this.changeDiscountValue();
     this.setInstallments();
   }
 
-  editItem(item: any) {
-    let indexOf = this.items.indexOf(item);
-    this.items[indexOf] = this.form.get('item').value;
-
-    this.changeDiscountValue();
-    this.setInstallments();
-  }
-
-  removeItem(item: any) {
-    var indexOf = this.items.indexOf(item);
-    this.items.splice(indexOf, 1);
+  removeItem(index: any) {
+    let items = this.form.get('items') as FormArray;
+    items.removeAt(index);
 
     this.changeDiscountValue();
     this.setInstallments();
   }
 
   getItemValueTotal(item: any) {
-    return this.accountDataService.getItemValueTotal(item.quantity, item.price);
+    let currentItem = item.value;
+    return this.accountDataService.getItemValueTotal(currentItem.quantity, currentItem.price);
   }
 
   getAccountSubTotal() {
-    return this.accountDataService.getSubTotal(this.items);
+    let items = this.form.get('items') as FormArray;
+    return this.accountDataService.getSubTotal(items.value);
   }
   //#endRegion Items
 
@@ -206,6 +212,8 @@ export class AccountPageComponent implements OnInit {
     this.form.get('discountTotal').setValue(discount);
     this.discount = discount;
     this.percent = percent;
+
+    this.setInstallments();
   }
 
   changeDiscountValue() {
@@ -227,6 +235,8 @@ export class AccountPageComponent implements OnInit {
     this.form.get('discountPercent').setValue(percent);
     this.percent = percent;
     this.discount = !discount ? 0 : discount;
+
+    this.setInstallments();
   }
 
   showErrorDiscount() {
@@ -263,19 +273,74 @@ export class AccountPageComponent implements OnInit {
     return this.errors.length > 0 ? false : true;
   }
 
+  setinstallments(installments: Installment[]) {
+    const installmentFGs = installments.map(installment => this.createInstallmentFormGroup(installment));
+    const installmentFormArray = this.fb.array(installmentFGs);
+    this.form.setControl('installments', installmentFormArray);
+  }
+
+  createInstallmentFormGroup(installment: Installment) {
+    let installmentGroup: FormGroup = this.fb.group({
+      sequence: [installment.sequence],
+      total: [installment.total, Validators.compose([
+        Validators.min(0),
+        Validators.required
+      ])],
+      dueDate: [installment.dueDate, Validators.required],
+      comments: [installment.comments, Validators.maxLength(4000)],
+      recurrent: [installment.recurrent]
+    });
+
+    return installmentGroup;
+  }
+
   setInstallments() {
     let accountTotal = this.getAccountTotal();
     let installmentTotal = this.form.get('installmentNumber').value;
     let dueDateBase = this.form.get('dueDateBase').value;
+    let recurrent = this.form.get('recurrent').value;
+
+    if (installmentTotal > 1000)
+      this.form.get('installmentNumber').setValue(1000);
 
     if (accountTotal <= 0 || !accountTotal) {
       this.form.get('installmentNumber').setValue(0);
-      this.installments = [];
+      this.setinstallments([]);
       return;
     }
 
-    this.installments = this.accountDataService.getInstallments(accountTotal, installmentTotal, dueDateBase);
-    console.log(this.installments);
+    let installments = this.accountDataService.getInstallments(accountTotal, installmentTotal, dueDateBase, recurrent);
+
+    this.setinstallments(installments);
+  }
+
+  removeInstallment(index: any) {
+    let installments = this.form.get('installments') as FormArray;
+    installments.removeAt(index);
+
+    let installmentFormArray = this.form.get('installments') as FormArray;
+    this.form.get('installmentNumber').setValue(installmentFormArray.length);
+
+    this.setInstallments();
+  }
+
+  totalChange(installment: FormGroup) {
+    let installmentsForm = this.form.get('installments') as FormArray;
+    let accountTotal = this.getAccountSubTotal();
+
+    let installmentsTotal: number = 0;
+
+    for (let i = 0; i < installmentsForm.length; i++) {
+      var installmentGroup = this.getFormGroupFromArray(i, 'installments');
+      installmentsTotal = installmentsTotal + installmentGroup.get('total').value;
+    }
+
+    if (installmentsTotal > accountTotal) {
+      installment.get('total').setValue(0);
+
+      this.errors = ['Valor das parcelas excede valor da conta!'];
+      this.showErrors();
+    }
   }
   //#endRegion Installments
 
@@ -283,9 +348,18 @@ export class AccountPageComponent implements OnInit {
     this.setInstallments();
   }
 
+  recurrentChange() {
+    let installmentsForm = this.form.get('installments') as FormArray;
+    let recurrent = this.form.get('recurrent').value;
+
+    for (let i = 0; i < installmentsForm.length; i++) {
+      var installmentGroup = this.getFormGroupFromArray(i, 'installments');
+      installmentGroup.get('recurrent').setValue(recurrent);
+    }
+  }
+
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
       this.accountDataService.createAccount(this.form.value).subscribe(
         result => {
           this._service.success("Mensagem do sistema", "Operação realizada com sucesso");

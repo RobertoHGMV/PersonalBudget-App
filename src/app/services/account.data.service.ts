@@ -88,7 +88,7 @@ export class AccountDataService {
         return parseFloat(value.toFixed(2));
     }
 
-    getInstallments(accountTotal: number, quantityInstallment: number, dueDateBase: Date) {
+    getInstallments(accountTotal: number, quantityInstallment: number, dueDateBase: Date, recurrent: boolean) {
         let installments: any[] = [];
         let installmentValue = this.getinstallmentValue(accountTotal, quantityInstallment);
         let installmentsTotal: number = installmentValue * quantityInstallment;
@@ -102,7 +102,8 @@ export class AccountDataService {
                 sequence: i,
                 dueDate: newDate,
                 total: installmentValue,
-                comments: ""
+                comments: "",
+                recurrent: recurrent
             });
         }
 

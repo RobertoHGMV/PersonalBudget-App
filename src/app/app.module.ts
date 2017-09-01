@@ -33,6 +33,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { AccountPageComponent } from './pages/account-page/account-page.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
