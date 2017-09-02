@@ -1,4 +1,4 @@
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
 export class Ui {
 
@@ -10,7 +10,15 @@ export class Ui {
             if (validSubGroup && control instanceof FormGroup) {
                 this.validForm(control);
             }
+            if (validSubGroup && control instanceof FormArray) {
+                let formArray = formGroup.get(field) as FormArray
+                this.validFormArray(formArray);
+            }
         });
+    }
+
+    validFormArray(formArray: FormArray) {
+        formArray.controls.forEach(formGroup => this.validForm(formGroup as FormGroup));
     }
 
     resetForm(form: FormGroup) {

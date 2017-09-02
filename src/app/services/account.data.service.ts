@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 
+import { DateHelper } from './../helpers/date.helper';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -95,12 +96,14 @@ export class AccountDataService {
 
         for (let i = 1; i <= quantityInstallment; i++) {
             let newDate = new Date(dueDateBase);
-            newDate.setMonth(newDate.getMonth()+1+i);
-            newDate.setDate(newDate.getDate()+1);
+            newDate.setMonth(newDate.getMonth() + i);
+            newDate.setDate(newDate.getDate() + 1);
+
+            let formatedDate =  DateHelper.formatDate(newDate);
 
             installments.push({
                 sequence: i,
-                dueDate: newDate,
+                dueDate: formatedDate,
                 total: installmentValue,
                 comments: "",
                 recurrent: recurrent
