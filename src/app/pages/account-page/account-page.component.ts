@@ -11,12 +11,14 @@ import { PaymentTermsDataService } from './../../services/paymentTerms.data.serv
 import { Ui } from './../../utils/ui';
 import { Item } from './../../models/item';
 import { Installment } from './../../models/installment';
+import { BusinessModalComponent } from './../../components/modals/business-modal/business-modal.component';
+import { BusinessPartnerDataService } from './../../services/businessPartner.data.service';
 
 @Component({
   selector: 'app-account-page',
   templateUrl: './account-page.component.html',
   styleUrls: ['./account-page.component.css'],
-  providers: [AccountDataService, PaymentTermsDataService, Ui]
+  providers: [AccountDataService, PaymentTermsDataService, Ui, BusinessModalComponent, BusinessPartnerDataService]
 })
 
 export class AccountPageComponent implements OnInit {
@@ -34,11 +36,12 @@ export class AccountPageComponent implements OnInit {
   }
 
   constructor(
-    private fb: FormBuilder,
-    private accountDataService: AccountDataService,
-    private paymentTermsDataService: PaymentTermsDataService,
+    private _fb: FormBuilder,
+    private _accountDataService: AccountDataService,
+    private _paymentTermsDataService: PaymentTermsDataService,
     public ui: Ui,
-    private _service: NotificationsService) { }
+    private _service: NotificationsService,
+    private _businessModal: BusinessModalComponent) { }
 
   ngOnInit() {
     this.fillPaymentTerms();
@@ -46,7 +49,7 @@ export class AccountPageComponent implements OnInit {
   }
 
   createForm() {
-    this.form = this.fb.group({
+    this.form = this._fb.group({
       businessPartnerFirstName: ['',
         Validators.compose([
           Validators.minLength(3),
@@ -59,7 +62,8 @@ export class AccountPageComponent implements OnInit {
           Validators.maxLength(60),
           Validators.required
         ])],
-      paymentTermsId: [''],
+      businessPartnerId: [''],
+      paymentTermsId: ['', Validators.required],
       discountPercent: ['', Validators.min(0)],
       discountTotal: ['', Validators.min(0)],
       accountDescription: ['', Validators.maxLength(100)],
@@ -68,8 +72,8 @@ export class AccountPageComponent implements OnInit {
       dueDateBase: [DateHelper.getCurrentDate(), Validators.required],
       installmentNumber: [0, Validators.min(1)],
 
-      items: this.fb.array([]),
-      installments: this.fb.array([])
+      items: this._fb.array([]),
+      installments: this._fb.array([])
     });
   }
 
@@ -93,17 +97,21 @@ export class AccountPageComponent implements OnInit {
   //#region Validação de tela
   resetFields() {
     this.form.patchValue({
+      businessPartnerId: null,
       businessPartnerFirstName: null,
       businessPartnerLastName: null,
       paymentTermsId: null,
+      discountPercent: null,
+      discountTotal: null,
       accountDescription: null,
-      item: {
-        title: null,
-        price: null,
-        quantity: null,
-        purchaseDate: null
-      }
+      recurrent: false,
+      comments: null,
+      dueDateBase: null,
+      installmentNumber: null
     });
+
+    this.setitems([]);
+    this.setinstallments([]);
   }
 
   validField(field, index, formArrayName) {
@@ -143,13 +151,13 @@ export class AccountPageComponent implements OnInit {
   //#region Items
   //não está sendo usado
   setitems(items: Item[]) {
-    const itemFGs = items.map(item => this.fb.group(item));
-    const itemFormArray = this.fb.array(itemFGs);
+    const itemFGs = items.map(item => this._fb.group(item));
+    const itemFormArray = this._fb.array(itemFGs);
     this.form.setControl('items', itemFormArray);
   }
 
   addItems() {
-    let itemGroup: FormGroup = this.fb.group({
+    let itemGroup: FormGroup = this._fb.group({
       title: ['',
         Validators.compose([
           Validators.minLength(3),
@@ -161,7 +169,7 @@ export class AccountPageComponent implements OnInit {
           Validators.min(1),
           Validators.required
         ])],
-      price: [0,
+      price: ['',
         Validators.compose([
           Validators.min(0.01),
           Validators.required
@@ -187,12 +195,12 @@ export class AccountPageComponent implements OnInit {
 
   getItemValueTotal(item: any) {
     let currentItem = item.value;
-    return this.accountDataService.getItemValueTotal(currentItem.quantity, currentItem.price);
+    return this._accountDataService.getItemValueTotal(currentItem.quantity, currentItem.price);
   }
 
   getAccountSubTotal() {
     let items = this.form.get('items') as FormArray;
-    return this.accountDataService.getSubTotal(items.value);
+    return this._accountDataService.getSubTotal(items.value);
   }
   //#endRegion Items
 
@@ -212,12 +220,12 @@ export class AccountPageComponent implements OnInit {
 
   setinstallments(installments: Installment[]) {
     const installmentFGs = installments.map(installment => this.createInstallmentFormGroup(installment));
-    const installmentFormArray = this.fb.array(installmentFGs);
+    const installmentFormArray = this._fb.array(installmentFGs);
     this.form.setControl('installments', installmentFormArray);
   }
 
   createInstallmentFormGroup(installment: Installment) {
-    let installmentGroup: FormGroup = this.fb.group({
+    let installmentGroup: FormGroup = this._fb.group({
       total: [installment.total,
       Validators.compose([
         Validators.min(0.01),
@@ -247,7 +255,7 @@ export class AccountPageComponent implements OnInit {
       return;
     }
 
-    let installments = this.accountDataService.getInstallments(accountTotal, installmentTotal, dueDateBase, recurrent);
+    let installments = this._accountDataService.getInstallments(accountTotal, installmentTotal, dueDateBase, recurrent);
 
     this.setinstallments(installments);
   }
@@ -292,7 +300,7 @@ export class AccountPageComponent implements OnInit {
       return;
     }
 
-    let discount = this.accountDataService.getDiscountValue(subTotal, percent);
+    let discount = this._accountDataService.getDiscountValue(subTotal, percent);
 
     if (this.checkDiscount(discount, subTotal) || subTotal === 0) {
       this.showErrorDiscount();
@@ -320,7 +328,7 @@ export class AccountPageComponent implements OnInit {
       return;
     }
 
-    let percent = this.accountDataService.getDiscountPercent(subTotal, discount)
+    let percent = this._accountDataService.getDiscountPercent(subTotal, discount)
 
     this.form.get('discountPercent').setValue(percent);
     this.percent = percent;
@@ -352,7 +360,7 @@ export class AccountPageComponent implements OnInit {
   getAccountTotal() {
     let subTotal = this.getAccountSubTotal();
     let discount = this.form.get('discountTotal').value;
-    return this.accountDataService.getTotal(subTotal, discount);
+    return this._accountDataService.getTotal(subTotal, discount);
   }
 
   dueDateChange() {
@@ -369,8 +377,22 @@ export class AccountPageComponent implements OnInit {
     }
   }
 
+  //#region BusinessPartner
+  showBusinessPartner() {
+    this._businessModal.showModal();
+  }
+
+  setBusinessPartner(event) {
+    this.form.patchValue({
+      businessPartnerId: event.partner.id,
+      businessPartnerFirstName: event.partner.firstName,
+      businessPartnerLastName: event.partner.lastName
+    });
+  }
+  //endRegion
+
   fillPaymentTerms() {
-    this.paymentTermsDataService.getPaymentTerms().subscribe(
+    this._paymentTermsDataService.getPaymentTerms().subscribe(
       result => {
         this.paymentTerms = result;
       },
@@ -382,8 +404,7 @@ export class AccountPageComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
-      this.accountDataService.createAccount(this.form.value).subscribe(
+      this._accountDataService.createAccount(this.form.value).subscribe(
         result => {
           this._service.success("Mensagem do sistema", "Operação realizada com sucesso");
           this.resetFields();

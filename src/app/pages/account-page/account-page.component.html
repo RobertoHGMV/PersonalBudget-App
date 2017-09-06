@@ -11,21 +11,23 @@
         <div class="column is-full-mobile">
           <section class="panel">
             <form [formGroup]="form">
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label class="checkbox"><input type="checkbox" (change)="recurrentChange()" formControlName="recurrent">Recorrente</label>
-                  </div>
-                </div>
-              </div>
               <p class="panel-heading">
                 Contas
               </p>
               <div class="box">
                 <div class="columns">
+                  <div class="column is-one-quarter">
+                    <label class="label"></label>
+                    <div class="field">
+                      <button class="button is-info is-outlined" (click)="showBusinessPartner()">Escolher Parceiro</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="columns">
                   <div class="column">
                     <div class="field">
-                      <label class="label">Nome*</label>
+                      <label class="label">Parceiro de Negócio*</label>
                       <div class="control has-icons-left has-icons-right">
                         <input class="input" type="text" formControlName="businessPartnerFirstName" [ngClass]="setClass('businessPartnerFirstName')">
                         <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
@@ -78,7 +80,7 @@
                       <div class="control">
                         <div class="select is-fullwidth">
                           <select formControlName="dueDateBase" formControlName="paymentTermsId">
-                            <option *ngFor="let paymentTerm of paymentTerms">{{ paymentTerm.description }}</option>
+                            <option *ngFor="let paymentTerm of paymentTerms" [value]="paymentTerm.id">{{ paymentTerm.description }}</option>
                           </select>
                         </div>
                       </div>
@@ -140,22 +142,19 @@
                               </td>
                               <td>
                                 <p class="control has-icons-left">
-                                  <input class="input" type="number" min="1" max="1000000" (change)="editItem()" formControlName="quantity"
-                                    [ngClass]="setClass('quantity', i, 'items')">
+                                  <input class="input" type="number" min="1" max="1000000" (change)="editItem()" formControlName="quantity" [ngClass]="setClass('quantity', i, 'items')">
                                   <span class="icon is-small is-left"><i class="fa fa-asterisk"></i></span>
                                   <app-message-error [showError]="validField('quantity', i, 'items')" msgError="Quantidade inválida"></app-message-error>
                                 </p>
                               </td>
                               <td>
                                 <p class="control has-icons-left">
-                                  <input class="input" type="number" min="0.01" max="1000000" (change)="editItem()" formControlName="price"
-                                    [ngClass]="setClass('price', i, 'items')">
+                                  <input class="input" type="number" min="0.01" max="1000000" (change)="editItem()" formControlName="price" [ngClass]="setClass('price', i, 'items')">
                                   <span class="icon is-small is-left"><i class="fa fa-money"></i></span>
                                   <app-message-error [showError]="validField('price', i, 'items')" msgError="Preço inválido"></app-message-error>
                                 </p>
                               </td>
                               <td><strong>{{ getItemValueTotal(item) | number: '1.2-2' }}</strong></td>
-                              <!-- <td class="is-icon has-text-centered"><a class="button is-info is-outlined" (click)="editItem(item)"><i class="fa fa-pencil-square-o"></i></a></td> -->
                               <td class="is-icon has-text-centered"><a class="button is-danger is-outlined" (click)="removeItem(i)"><i class="fa fa-times"></i></a></td>
                             </tr>
                           </tbody>
@@ -204,8 +203,7 @@
                       <div class="field">
                         <label class="label">Desconto</label>
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input" type="number" max="1000000" (change)="changeDiscountValue()" formControlName="discountTotal"
-                            [ngClass]="setClass('discountTotal')">
+                          <input class="input" type="number" max="1000000" (change)="changeDiscountValue()" formControlName="discountTotal" [ngClass]="setClass('discountTotal')">
                           <span class="icon is-small is-left"><i class="fa fa-minus"></i></span>
                           <app-icon-error [icon]="setIcon('discountTotal')"></app-icon-error>
                           <app-message-error [showError]="validField('discountTotal')" msgError="Desconto inválido"></app-message-error>
@@ -216,8 +214,7 @@
                       <div class="field">
                         <label class="label">Nº Parcelas</label>
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input" type="number" max="1000" formControlName="installmentNumber" (change)="setInstallments()"
-                            [ngClass]="setClass('installmentNumber')">
+                          <input class="input" type="number" max="1000" formControlName="installmentNumber" (change)="setInstallments()" [ngClass]="setClass('installmentNumber')">
                           <span class="icon is-small is-left"><i class="fa fa-asterisk"></i></span>
                           <app-icon-error [icon]="setIcon('discountTotal')"></app-icon-error>
                           <app-message-error [showError]="validField('installmentNumber')" msgError="Quantidade de parcelas inválida"></app-message-error>
@@ -253,8 +250,7 @@
                               </td>
                               <td>
                                 <p class="control has-icons-left">
-                                  <input class="input" type="number" min="0.01" max="1000000" formControlName="total" (change)="totalChange(installment)"
-                                    [ngClass]="setClass('total', i, 'installments')">
+                                  <input class="input" type="number" min="0.01" max="1000000" formControlName="total" (change)="totalChange(installment)" [ngClass]="setClass('total', i, 'installments')">
                                   <span class="icon is-small is-left"><i class="fa fa-money"></i></span>
                                   <app-message-error [showError]="validField('total', i, 'installments')" msgError="Total inválido"></app-message-error>
                                 </p>
@@ -270,7 +266,6 @@
                               <td>
                                 <input type="checkbox" formControlName="recurrent">
                               </td>
-                              <!-- <td class="is-icon has-text-centered"><a class="button is-info is-outlined" (click)="editItem(installment)"><i class="fa fa-pencil-square-o"></i></a></td> -->
                               <td class="is-icon has-text-centered"><a class="button is-danger is-outlined" (click)="removeInstallment(i)"><i class="fa fa-times"></i></a></td>
                             </tr>
                           </tbody>
@@ -286,8 +281,10 @@
         </div>
       </div>
       <simple-notifications [options]="options"></simple-notifications>
-      <app-form-debug [form]="form"></app-form-debug>
+      <!-- <app-form-debug [form]="form"></app-form-debug> -->
     </section>
   </div>
 </div>
 <app-footer></app-footer>
+
+<app-business-modal (selectedPartner)="setBusinessPartner($event)"></app-business-modal>

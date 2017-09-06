@@ -33,6 +33,9 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { AccountPageComponent } from './pages/account-page/account-page.component';
 
+//Modais
+import { BusinessModalComponent } from './components/modals/business-modal/business-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +51,8 @@ import { AccountPageComponent } from './pages/account-page/account-page.componen
     AccountPageComponent,
     IconErrorComponent,
     MessageErrorComponent,
-    FormDebugComponent
+    FormDebugComponent,
+    BusinessModalComponent
   ],
   imports: [
     BrowserModule,

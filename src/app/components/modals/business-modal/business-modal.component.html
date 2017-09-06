@@ -1,0 +1,30 @@
+<div class="modal animated fadeIn" id="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Parceiros de Negócio</p>
+      <button class="delete" (click)="hideModal()"></button>
+    </header>
+    <section class="modal-card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Código.</th>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let business of businessList" (click)="select(business)" [ngClass]="businessId == business.id ? 'is-selected' : ''">
+            <td>{{ business.id }}</td>
+            <td>{{ business.firstName }}</td>
+            <td>{{ business.lastName }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <footer class="modal-card-foot" (click)="hideModal()">
+      <button class="button">OK</button>
+    </footer>
+  </div>
+</div>
