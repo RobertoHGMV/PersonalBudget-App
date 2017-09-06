@@ -30,4 +30,13 @@ export class HomePageComponent implements OnInit {
       }
       );
   }
+
+  getAccountsTotal() {
+    if (!this.accounts)
+      return;
+
+    let total = 0;
+    this.accounts.forEach(account => total += account.total);
+    return total;
+  }
 }
