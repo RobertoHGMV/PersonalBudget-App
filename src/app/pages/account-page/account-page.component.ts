@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -62,10 +63,10 @@ export class AccountPageComponent implements OnInit {
           Validators.maxLength(60),
           Validators.required
         ])],
-      businessPartnerId: [''],
-      paymentTermsId: ['', Validators.required],
-      discountPercent: ['', Validators.min(0)],
-      discountTotal: ['', Validators.min(0)],
+      businessPartnerId: [0],
+      paymentTermsId: [0, Validators.required],
+      discountPercent: [0, Validators.min(0)],
+      discountTotal: [0, Validators.min(0)],
       accountDescription: ['', Validators.maxLength(100)],
       recurrent: [false],
       comments: ['', Validators.maxLength(4000)],
@@ -91,25 +92,12 @@ export class AccountPageComponent implements OnInit {
   }
 
   showErrors() {
-    this.errors.forEach(error => this._service.error("Mensagem do sistema", error));
+    this.errors.forEach(error => this._service.error("Mensagem do sistema", error.message));
   }
 
   //#region Validação de tela
   resetFields() {
-    this.form.patchValue({
-      businessPartnerId: null,
-      businessPartnerFirstName: null,
-      businessPartnerLastName: null,
-      paymentTermsId: null,
-      discountPercent: null,
-      discountTotal: null,
-      accountDescription: null,
-      recurrent: false,
-      comments: null,
-      dueDateBase: null,
-      installmentNumber: null
-    });
-
+    this.form.reset();
     this.setitems([]);
     this.setinstallments([]);
   }
@@ -149,7 +137,6 @@ export class AccountPageComponent implements OnInit {
   //endRegion Validação de Tela
 
   //#region Items
-  //não está sendo usado
   setitems(items: Item[]) {
     const itemFGs = items.map(item => this._fb.group(item));
     const itemFormArray = this._fb.array(itemFGs);
@@ -164,17 +151,17 @@ export class AccountPageComponent implements OnInit {
           Validators.maxLength(60),
           Validators.required
         ])],
-      quantity: ['',
+      quantity: [0,
         Validators.compose([
           Validators.min(1),
           Validators.required
         ])],
-      price: ['',
+      price: [0,
         Validators.compose([
           Validators.min(0.01),
           Validators.required
         ])],
-      purchaseDate: ['', Validators.required]
+      purchaseDate: [DateHelper.getCurrentDate(), Validators.required]
     });
 
     this.items.push(itemGroup);
@@ -403,18 +390,25 @@ export class AccountPageComponent implements OnInit {
   }
 
   submit() {
+    this.ui.lock('btnSave');
+    
     if (this.form.valid) {
       this._accountDataService.createAccount(this.form.value).subscribe(
         result => {
           this._service.success("Mensagem do sistema", "Operação realizada com sucesso");
           this.resetFields();
         },
-        error => this.errors = JSON.parse(error._body).errors
+        error => {
+          this.errors = JSON.parse(error._body).errors;
+          this.showErrors();
+        }
       )
     }
     else {
       this.ui.validForm(this.form);
     }
+
+    this.ui.unlock('btnSave');
   }
 
 }
