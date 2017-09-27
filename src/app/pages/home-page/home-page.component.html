@@ -29,7 +29,8 @@
                     <th>Dt. Compra</th>
                     <th>Total</th>
                     <th>Parc.</th>
-                    <th colspan="3">Rec.</th>
+                    <th>Rec.</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -40,7 +41,10 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th colspan="5">{{ getAccountsTotal() | number: '1.2-2' }}</th>
+                    <th>{{ getAccountsTotal() | number: '1.2-2' }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -54,12 +58,7 @@
                     <td>{{ account.total | number: '1.2-2' }}</td>
                     <td>{{ account.numberOfInstallments }}</td>
                     <td><input type="checkbox" [checked]="account.recurrrent" onclick="return false;" /></td>
-                    <td class="is-icon">
-                      <a href="#"><i class="fa fa-twitter"></i></a>
-                    </td>
-                    <td class="is-icon">
-                      <a href="#"><i class="fa fa-instagram"></i></a>
-                    </td>
+                    <td class="is-icon has-text-centered"><a class="button is-info is-outlined" (click)="removeInstallment(i)"><i class="fa fa-pencil-square-o"></i></a></td>
                   </tr>
                 </tbody>
               </table>
@@ -72,3 +71,4 @@
   </div>
 </div>
 <app-footer></app-footer>
+<simple-notifications [options]="options"></simple-notifications>

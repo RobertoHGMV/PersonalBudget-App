@@ -91,10 +91,6 @@ export class AccountPageComponent implements OnInit {
     return control.at(index) as FormGroup;
   }
 
-  showErrors() {
-    this.errors.forEach(error => this._service.error("Mensagem do sistema", error.message));
-  }
-
   //#region Validação de tela
   resetFields() {
     this.form.reset();
@@ -271,8 +267,7 @@ export class AccountPageComponent implements OnInit {
     if (installmentsTotal > accountTotal) {
       installment.get('total').setValue(0);
 
-      this.errors = ['Valor das parcelas excede valor da conta!'];
-      this.showErrors();
+      this._service.error("Mensagem do sistema", "Valor das parcelas excede valor da conta!")
     }
   }
   //#endRegion Installments
@@ -378,20 +373,28 @@ export class AccountPageComponent implements OnInit {
   }
   //endRegion
 
+  showErrors(error) {
+    if (error.status == 0)
+      this._service.error("Mensagem do sistema", "Falha de conexão com o servidor!")
+    else {
+      let errors: any[] = JSON.parse(error._body).errors;
+      errors.forEach(error => this._service.error("Mensagem do sistema", error.message));
+    }
+  }
+
   fillPaymentTerms() {
     this._paymentTermsDataService.getPaymentTerms().subscribe(
       result => {
         this.paymentTerms = result;
       },
       error => {
-        this.errors = [];
-        this.errors = JSON.parse(error._body).errors;
+        this.showErrors(error);
       });
   }
 
   submit() {
     this.ui.lock('btnSave');
-    
+
     if (this.form.valid) {
       this._accountDataService.createAccount(this.form.value).subscribe(
         result => {
@@ -399,8 +402,7 @@ export class AccountPageComponent implements OnInit {
           this.resetFields();
         },
         error => {
-          this.errors = JSON.parse(error._body).errors;
-          this.showErrors();
+          this.showErrors(error);
         }
       )
     }

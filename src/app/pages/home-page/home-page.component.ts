@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { NotificationsService } from "angular2-notifications";
+
 import { AccountDataService } from '../../services/account.data.service';
 import { Account } from '../../models/account';
 
@@ -9,26 +11,27 @@ import { Account } from '../../models/account';
   providers: [AccountDataService]
 })
 export class HomePageComponent implements OnInit {
-  public errors: any[];
   public accounts: any[];
 
-  constructor(private accountDataService: AccountDataService) { }
+  public options = {
+    position: ["bottom", "right"],
+    timeOut: 5000,
+    lastOnBottom: true
+  }
+
+  constructor(private accountDataService: AccountDataService, private _service: NotificationsService) { }
 
   ngOnInit() {
     this.fillAccounts();
   }
 
-  fillAccounts() {
-    this.accountDataService.getAccounts()
-      .subscribe(
-      result => {
-        this.accounts = result;
-      },
-      error => {
-        this.errors = [];
-        this.errors = JSON.parse(error._body).errors;
-      }
-      );
+  showErrors(error) {
+    if (error.status == 0)
+      this._service.error("Mensagem do sistema", "Falha de conexão com o servidor!")
+    else {
+      let errors: any[] = JSON.parse(error._body).errors;
+      errors.forEach(error => this._service.error("Mensagem do sistema", error.message));
+    }
   }
 
   getAccountsTotal() {
@@ -38,5 +41,17 @@ export class HomePageComponent implements OnInit {
     let total = 0;
     this.accounts.forEach(account => total += account.total);
     return total;
+  }
+
+  fillAccounts() {
+    this.accountDataService.getAccounts()
+      .subscribe(
+      result => {
+        this.accounts = result;
+      },
+      error => {
+        this.showErrors(error);
+      }
+      );
   }
 }

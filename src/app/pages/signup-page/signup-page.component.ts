@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { NotificationsService } from "angular2-notifications";
+
 import { CustomValidator } from '../../validators/custom.validators';
 import { Ui } from '../../utils/ui';
 import { UserDataService } from '../../services/user.data.service';
@@ -14,80 +16,103 @@ import { UserDataService } from '../../services/user.data.service';
 })
 export class SignupPageComponent implements OnInit {
   public form: FormGroup;
-  public errors: any[] = [];
-  public success: any = '';
 
-  constructor(private fb: FormBuilder, private ui: Ui, private userDataService: UserDataService, private router: Router) {
+  public options = {
+    position: ["bottom", "right"],
+    timeOut: 5000,
+    lastOnBottom: true
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private ui: Ui,
+    private userDataService: UserDataService,
+    private router: Router,
+    private _service: NotificationsService) { }
+
+  ngOnInit() {
+    this.createForm();
+  }
+
+  createForm() {
     this.form = this.fb.group({
-      firstName: ['', Validators.compose([
-        Validators.minLength(3),
-        Validators.maxLength(60),
-        Validators.required
-      ])],
-      lastName: ['', Validators.compose([
-        Validators.minLength(3),
-        Validators.maxLength(60),
-        Validators.required
-      ])],
-      email: ['', Validators.compose([
-        Validators.required,
-        CustomValidator.EmailValidator
-      ])],
-      userName: ['', Validators.compose([
-        Validators.minLength(3),
-        Validators.maxLength(20),
-        Validators.required
-      ])],
-      password: ['', Validators.compose([
-        Validators.minLength(5),
-        Validators.maxLength(10)
-      ])],
-      confirmPassword: ['', Validators.compose([
-        Validators.minLength(5),
-        Validators.maxLength(10)
-      ])]
+      firstName: ['',
+        Validators.compose([
+          Validators.minLength(3),
+          Validators.maxLength(60),
+          Validators.required
+        ])],
+      lastName: ['',
+        Validators.compose([
+          Validators.minLength(3),
+          Validators.maxLength(60),
+          Validators.required
+        ])],
+      email: ['',
+        Validators.compose([
+          Validators.required,
+          CustomValidator.EmailValidator
+        ])],
+      userName: ['',
+        Validators.compose([
+          Validators.minLength(3),
+          Validators.maxLength(20),
+          Validators.required
+        ])],
+      password: ['',
+        Validators.compose([
+          Validators.minLength(5),
+          Validators.maxLength(10)
+        ])],
+      confirmPassword: ['',
+        Validators.compose([
+          Validators.minLength(5),
+          Validators.maxLength(10)
+        ])]
     });
   }
 
-  ngOnInit() {
-  }
-
-  // checkEmail(){
-  //   this.ui.lock('emailControl');
-
-  //   setTimeout(() => {
-  //     this.ui.unlock('emailControl');
-  //     console.log(this.form.controls['emailControl'].value);
-  //   }, 3000);
-  // }
-
-  showModal(modal){
+  showModal(modal) {
     this.ui.setActive(modal);
   }
 
-  hideModal(modal){
+  hideModal(modal) {
     this.ui.setInactive(modal);
   }
 
-  closeErrors() {
-    this.errors = [];
+  //#region Validação de tela
+  resetFields() {
+    this.form.reset();
   }
 
-  showSuccess() {
-    this.success = "Operação realizada com sucesso";
+  validField(field) {
+    return this.ui.verificationValidTouched(this.form, field);
   }
 
-  closeSuccess() {
-    this.success = '';
-    this.router.navigateByUrl('/');
+  setClass(field) {
+    return this.ui.setClassField(this.form, field);
+  }
+
+  setIcon(field) {
+    return this.ui.setIconInField(this.form, field);
+  }
+  //endRegion Validação de Tela
+
+  showErrors(error) {
+    if (error.status == 0)
+      this._service.error("Mensagem do sistema", "Falha de conexão com o servidor!")
+    else {
+      let errors: any[] = JSON.parse(error._body).errors;
+      errors.forEach(error => this._service.error("Mensagem do sistema", error.message));
+    }
   }
 
   submit() {
     this.userDataService.createUser(this.form.value).subscribe(
       result => {
-        this.showSuccess();
+        this._service.success("Mensagem do sistema", "Operação realizada com sucesso");
       }, error => {
-        this.errors = JSON.parse(error._body).errors;
+        this.showErrors(error);
       })
   }
 }

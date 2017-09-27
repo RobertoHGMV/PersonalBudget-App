@@ -25,15 +25,6 @@
                 <!-- <h1 class="avatar has-text-centered section">
                   <img src="https://placehold.it/128x128">
                 </h1> -->
-                <div class="notification is-info" *ngIf="info != ''">
-                  <button class="delete" (click)="closeInfo()"></button>{{info}}
-                </div>
-                <div class="notification is-danger" id="notification" *ngIf="errors.length > 0">
-                  <button class="delete" (click)="closeErrors()"></button>
-                  <ul>
-                    <li *ngFor="let error of errors">{{ error.message }}</li>
-                  </ul>
-                </div>
                 <div class="hero-heading">
                   <div class="section has-text-centered courgette animated pulse infinite">
                     <p class="help has-text-centered medium-text">Personal Budget</p>
@@ -72,6 +63,7 @@
     </div>
   </div>
 </section>
+<simple-notifications [options]="options"></simple-notifications>
 
 <div class="modal animated fadeIn" id="modalSendEmail">
   <div class="modal-background"></div>
@@ -85,36 +77,15 @@
         <label class="label">Email</label>
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="email" placeholder="Informe o e-mail para a recuperação da senha...">
-          <span class="icon is-small is-left">
-              <i class="fa fa-envelope"></i>
-            </span>
-          <span class="icon is-small is-right">
-               <i class="fa fa-check"></i> 
-            </span>
+          <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+          <span class="icon is-small is-right"><i class="fa fa-check"></i> </span>
         </div>
       </div>
-    </section>
-    <footer class="modal-card-foot">
+      <br>
       <p class="control">
         <button class="button is-info" (click)="hideModal('modalSendEmail'); showInfo();">Enviar</button>
         <button class="button" (click)="hideModal('modalSendEmail')">Cancelar</button>
       </p>
-    </footer>
+    </section>
   </div>
 </div>
-
-<!-- <div class="modal animated fadeIn" id="modalMsg">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Mensagem do Sistema</p>
-      <button class="delete" (click)="hideModal('modalMsg')"></button>
-    </header>
-    <section class="modal-card-body">
-      Se existir algum cadastro com o e-mail informado, enviaremos uma nova senha.
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button" (click)="hideModal('modalMsg')">OK</button>
-    </footer>
-  </div>
-</div> -->

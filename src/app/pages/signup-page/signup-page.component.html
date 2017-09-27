@@ -7,74 +7,45 @@
             Registrar Usuário
           </h1>
           <div class="box animated fadeIn">
-            <div class="notification is-success" *ngIf="success != ''">
-              <button class="delete" (click)="closeSuccess()"></button>{{success}}
-            </div>
-            <div class="notification is-danger" id="notification" *ngIf="errors.length > 0">
-              <button class="delete" (click)="closeErrors()"></button>
-              <ul>
-                <li *ngFor="let error of errors">{{ error.message }}</li>
-              </ul>
-            </div>
             <form [formGroup]="form">
               <div class="field">
                 <label class="label">Nome</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="Pedro" formControlName="firstName" [ngClass]="(!form.controls.firstName.valid && !form.controls.firstName.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-user"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                    <i class="fa fa-warning" *ngIf="!form.controls.firstName.valid && !form.controls.firstName.pristine"></i>
-                    <i class="fa fa-check" *ngIf="form.controls.firstName.valid && !form.controls.firstName.pristine"></i>
-                  </span>
+                  <input class="input" type="text" placeholder="Pedro" formControlName="firstName" [ngClass]="setClass('firstName')">
+                  <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                  <app-icon-error [icon]="setIcon('firstName')"></app-icon-error>
+                  <app-message-error [showError]="validField('firstName')" msgError="Nome inválido"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.firstName.valid && !form.controls.firstName.pristine">Nome inválido</p>
               </div>
 
               <div class="field">
                 <label class="label">Sobrenome</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="Ribeiro" formControlName="lastName" [ngClass]="(!form.controls.lastName.valid && !form.controls.lastName.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-user"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                    <i class="fa fa-warning" *ngIf="!form.controls.lastName.valid && !form.controls.lastName.pristine"></i>
-                    <i class="fa fa-check" *ngIf="form.controls.lastName.valid && !form.controls.lastName.pristine"></i>
-                  </span>
+                  <input class="input" type="text" placeholder="Ribeiro" formControlName="lastName" [ngClass]="setClass('lastName')">
+                  <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                  <app-icon-error [icon]="setIcon('lastName')"></app-icon-error>
+                  <app-message-error [showError]="validField('lastName')" msgError="Sobrenome inválido"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.lastName.valid && !form.controls.lastName.pristine">Sobrenome inválido</p>
               </div>
 
               <div class="field">
                 <label class="label">Email</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="email" placeholder="pedro@example.org" id="emailControl" formControlName="email" [ngClass]="(!form.controls.email.valid && !form.controls.email.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-envelope"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                     <i class="fa fa-warning" *ngIf="!form.controls.email.valid && !form.controls.email.pristine"></i>
-                     <i class="fa fa-check" *ngIf="form.controls.email.valid && !form.controls.email.pristine"></i> 
-                  </span>
+                  <input class="input" type="email" placeholder="pedro@example.org" id="emailControl" formControlName="email" [ngClass]="setClass('email')">
+                  <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                  <app-icon-error [icon]="setIcon('email')"></app-icon-error>
+                  <app-message-error [showError]="validField('email')" msgError="E-mail inválido"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.email.valid && !form.controls.email.pristine">E-mail inválido</p>
               </div>
 
               <div class="field">
                 <label class="label">Usuário</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="pedro" id="userName" formControlName="userName" [ngClass]="(!form.controls.userName.valid && !form.controls.userName.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-user"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                    <i class="fa fa-warning" *ngIf="!form.controls.userName.valid && !form.controls.userName.pristine"></i>
-                    <i class="fa fa-check" *ngIf="form.controls.userName.valid && !form.controls.userName.pristine"></i>
-                  </span>
+                  <input class="input" type="text" placeholder="pedro" id="userName" formControlName="userName" [ngClass]="setClass('userName')">
+                  <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                  <app-icon-error [icon]="setIcon('userName')"></app-icon-error>
+                  <app-message-error [showError]="validField('userName')" msgError="Nome de usuário inválido"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.userName.valid && !form.controls.userName.pristine">Nome de usuário inválido</p>
               </div>
 
               <hr>
@@ -82,36 +53,26 @@
               <div class="field">
                 <label class="label">Senha</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="password" [ngClass]="(!form.controls.password.valid && !form.controls.password.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-lock"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                    <i class="fa fa-warning" *ngIf="!form.controls.password.valid && !form.controls.password.pristine"></i>
-                    <i class="fa fa-check" *ngIf="form.controls.password.valid && !form.controls.password.pristine"></i>
-                  </span>
+                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="password" [ngClass]="setClass('password')">
+                  <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                  <app-icon-error [icon]="setIcon('password')"></app-icon-error>
+                  <app-message-error [showError]="validField('password')" msgError="Senha inválida"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.password.valid && !form.controls.password.pristine">Senha inválida</p>
               </div>
 
               <div class="field">
                 <label class="label">Confirmar senha</label>
                 <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="confirmPassword" [ngClass]="(!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine) ? 'is-danger' : is-success">
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-lock"></i>
-                  </span>
-                  <span class="icon is-small is-right">
-                    <i class="fa fa-warning" *ngIf="!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine"></i>
-                    <i class="fa fa-check" *ngIf="form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine"></i>
-                  </span>
+                  <input class="input" type="password" placeholder="●●●●●●●" formControlName="confirmPassword" [ngClass]="setClass('confirmPassword')">
+                  <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                  <app-icon-error [icon]="setIcon('confirmPassword')"></app-icon-error>
+                  <app-message-error [showError]="validField('confirmPassword')" msgError="Confirmação de senha inválida"></app-message-error>
                 </div>
-                <p class="help is-danger" *ngIf="!form.controls.confirmPassword.valid && !form.controls.confirmPassword.pristine">Senha inválida</p>
               </div>
 
               <hr>
               <p class="control">
-                <button (click)="submit()" class="button is-info" [disabled]="!form.valid">Registrar</button>
+                <button class="button is-info" [disabled]="!form.valid" (click)="submit()">Registrar</button>
                 <button class="button is-link" routerLink="/">Cancelar</button>
               </p>
             </form>
@@ -125,6 +86,7 @@
     </div>
   </div>
 </section>
+<simple-notifications [options]="options"></simple-notifications>
 
 <div class="modal animated fadeIn" id="modal">
   <div class="modal-background"></div>
@@ -138,9 +100,8 @@
       <p>●Sobrenome: 3 a 60 caracteres</p>
       <p>●Usuário: 3 a 20 caracteres</p>
       <p>●Senha: 3 a 60 caracteres</p>
-    </section>
-    <footer class="modal-card-foot">
+      <br>
       <button class="button" (click)="hideModal('modal')">OK</button>
-    </footer>
+    </section>
   </div>
 </div>
